@@ -50,7 +50,7 @@ public class Criatura {
         }
     }
 
-    private Criatura criaturaMaisProx(Criatura[] criaturas){
+    public Criatura criaturaMaisProx(Criatura[] criaturas){
         Criatura criaturaMaisProx = null;
         double menorDist = 101;
         double distAtual;
