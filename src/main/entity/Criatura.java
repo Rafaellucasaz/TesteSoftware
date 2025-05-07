@@ -7,6 +7,7 @@ public class Criatura {
     private int id;
     private int ouro;
     private double posX;
+    private final int horizonte = 20;
 
     public Criatura(int id){
         this.id = id;
@@ -39,11 +40,14 @@ public class Criatura {
     }
 
     private double posInicial (){
-         return Math.random() * 100;
+         return Math.random() * horizonte;
     }
 
     public void move(){
         this.posX += (Math.random() * 2) - 1;
+        if(this.posX > horizonte || this.posX < 0){
+            this.posX = posInicial();  //redifino a criatura para uma posição aleatória de novo, acredito que pode dá uma dinâmica legal
+        }
     }
 
     private Criatura criaturaMaisProx(Criatura[] criaturas){

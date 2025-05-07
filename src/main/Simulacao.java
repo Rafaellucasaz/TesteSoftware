@@ -6,8 +6,7 @@ import java.util.Scanner;
 
 public class Simulacao {
       static Scanner sc = new Scanner(System.in);
-      static final int nCriaturas = 4;
-//    public static final int horizonte = 100;
+      static final int nCriaturas = 10;
       static Criatura[] criaturas = new Criatura[nCriaturas];
       static int rodadas = 10;
 
@@ -22,7 +21,7 @@ public class Simulacao {
         }
 
         while(rodadaAtual < rodadas){
-            System.out.println("Rodada atual:" + rodadaAtual);
+            System.out.println("Rodada atual:" + (rodadaAtual + 1));
             for(int i = 0; i<nCriaturas;i++){
                 System.out.println("-----------------------------------------");
                 System.out.println("Criatura de id: " + criaturas[i].getId());
@@ -40,6 +39,7 @@ public class Simulacao {
             }
 
             System.out.println("\n\nAperte enter para avançar a rodada!");
+            sc.nextLine();
             sc.nextLine();
             rodadaAtual++;
         }
