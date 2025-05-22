@@ -31,7 +31,13 @@ public class Criatura {
     }
 
     public void setPosX(double posX) {
-        this.posX = posX;
+        if(posX > Constantes.finalHorizonte || posX < Constantes.comecoHorizonte){
+            this.posX = posInicial();  //redefino a criatura para uma posição aleatória de novo, acredito que pode dá uma dinâmica legal
+        }
+        else{
+            this.posX = posX;
+        }
+
     }
 
     public int getId() {
@@ -58,15 +64,14 @@ public class Criatura {
         Color color = new Color(r, g, b);
         setColor(color);
     }
+
     private double posInicial (){
         return Constantes.comecoHorizonte + Math.random() * (Constantes.finalHorizonte - 10);
     }
 
     public void move(){
-        this.posX += (Math.random() * 2) - 1;
-        if(this.posX > Constantes.finalHorizonte || this.posX < Constantes.comecoHorizonte){
-            this.posX = posInicial();  //redefino a criatura para uma posição aleatória de novo, acredito que pode dá uma dinâmica legal
-        }
+        double posX = this.posX + (Math.random() * 2) - 1;
+        setPosX(posX);
     }
 
     public Criatura criaturaMaisProx(Criatura[] criaturas){
