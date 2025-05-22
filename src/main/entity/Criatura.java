@@ -2,16 +2,20 @@ package main.entity;
 
 import main.Constantes;
 
+import java.awt.*;
+
 public class Criatura {
 
     private int id;
     private double ouro;
     private double posX;
+    private Color color;
 
     public Criatura(int id){
         this.id = id;
         this.ouro = 1000000;
         this.posX = posInicial();
+        randomColor();
     }
 
     public double getOuro() {
@@ -38,6 +42,22 @@ public class Criatura {
         this.id = id;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+
+    private void randomColor(){
+        int r = (int)(Math.random() * 256);
+        int g = (int)(Math.random() * 256);
+        int b = (int)(Math.random() * 256);
+        Color color = new Color(r, g, b);
+        setColor(color);
+    }
     private double posInicial (){
         return Constantes.comecoHorizonte + Math.random() * (Constantes.finalHorizonte - 10);
     }

@@ -59,8 +59,8 @@ public class Menu extends JPanel {
             String criaturas = criaturasField.getText();
 
             if (!rodadas.isEmpty() && !criaturas.isEmpty()) {
-                if(Integer.parseInt(criaturas) > 40){
-                    JOptionPane.showMessageDialog(this, "Número máximo de criaturas é 40");
+                if(Integer.parseInt(criaturas) > 1000){
+                    JOptionPane.showMessageDialog(this, "Número máximo de criaturas é 1000");
                 }
                 else if(Integer.parseInt(criaturas) < 2){
                     JOptionPane.showMessageDialog(this, "Número mínimo de criaturas é 2");

@@ -37,44 +37,48 @@ public class Simulacao extends JPanel {
 
                     for (int i = 0; i < nCriaturas; i++) {
                         Criatura c = criaturas[i];
-                        g.setColor(Color.blue);
 
                         int x = (int) (c.getPosX() * 10);
                         int y = 150;
-                        int largura = 30;
-                        int altura = 30;
+                        int largura = 5;
+                        int altura = 5;
 
-                        g.fillRect(x, y, largura, altura);
-                        g.setColor(Color.GREEN);
-                        int raio = 20;
-                        g.fillOval(x + (largura - raio) / 2, y - raio, raio, raio);
+
+                        g.setColor(c.getColor());
+                        int raio = 5;
+                        g.fillOval(x, y , raio, raio);
                         g.setColor(Color.black);
-                        g.fillRect(x,y+altura,5,20);
-                        g.fillRect(x+25,y+altura,5,20);
 
-                        g.drawLine((Constantes.comecoHorizonte*10) - largura,0,(Constantes.comecoHorizonte*10) - largura,400);
-                        g.drawLine((Constantes.finalHorizonte*10) + largura,0,(Constantes.finalHorizonte*10) + largura,400);
-                        g.drawLine((Constantes.comecoHorizonte*10) - largura,200,(Constantes.finalHorizonte*10) + largura,200);
+
+                        g.drawLine((Constantes.comecoHorizonte*10) - raio,0,(Constantes.comecoHorizonte*10) - raio,400);
+                        g.drawLine((Constantes.finalHorizonte*10) + raio,0,(Constantes.finalHorizonte*10) + raio,400);
+                        g.drawLine((Constantes.comecoHorizonte*10) - raio,155,(Constantes.finalHorizonte*10) + raio,155);
 
                         g.setColor(Color.WHITE);
-                        g.drawString(Integer.toString(c.getId()), x + 10, y + 20);
+
                     }
                 }
             }
         };
 
-        simulacao.setSize(new Dimension(Constantes.larguraTela, Constantes.alturaTela/3));
+        simulacao.setPreferredSize(new Dimension(Constantes.larguraTela, Constantes.alturaTela/3));
+
         rodadaLabel = new JLabel("Rodada Atual: " + rodadaAtual);
         pauseButton = new JButton("Pausar simulação");
         simulacao.add(rodadaLabel);
         simulacao.add(pauseButton);
 
-        add(simulacao, BorderLayout.CENTER);
+        add(simulacao, BorderLayout.NORTH);
         score = new JPanel();
         score.setSize(new Dimension(Constantes.larguraTela,Constantes.alturaTela/3));
         score.setLayout(new GridLayout(1, 1));
-        add(score, BorderLayout.SOUTH);
 
+        JScrollPane scrollPane = new JScrollPane(score);
+
+
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        add(scrollPane,BorderLayout.CENTER);
     }
 
     public void iniciarSimulacao(int rodadas,int nCriaturas){
@@ -100,10 +104,10 @@ public class Simulacao extends JPanel {
             }
         });
 
-
-        int colunas = nCriaturas/10;
+        int linhas = nCriaturas/2;
+        int colunas = nCriaturas/linhas;
         score.removeAll();
-        score.setLayout(new GridLayout(10, colunas));
+        score.setLayout(new GridLayout(linhas, colunas));
 
         for (int i = 0; i < nCriaturas; i++) {
             Criatura criatura = new Criatura(i);
