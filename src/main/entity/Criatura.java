@@ -1,13 +1,12 @@
 package main.entity;
 
-import main.Simulacao;
+import main.Constantes;
 
 public class Criatura {
 
     private int id;
-    private int ouro;
+    private double ouro;
     private double posX;
-    private final int horizonte = 20;
 
     public Criatura(int id){
         this.id = id;
@@ -15,11 +14,11 @@ public class Criatura {
         this.posX = posInicial();
     }
 
-    public int getOuro() {
+    public double getOuro() {
         return ouro;
     }
 
-    public void setOuro(int ouro) {
+    public void setOuro(double ouro) {
         this.ouro = ouro;
     }
 
@@ -40,19 +39,19 @@ public class Criatura {
     }
 
     private double posInicial (){
-         return Math.random() * horizonte;
+        return Constantes.comecoHorizonte + Math.random() * (Constantes.finalHorizonte - 10);
     }
 
     public void move(){
         this.posX += (Math.random() * 2) - 1;
-        if(this.posX > horizonte || this.posX < 0){
-            this.posX = posInicial();  //redifino a criatura para uma posição aleatória de novo, acredito que pode dá uma dinâmica legal
+        if(this.posX > Constantes.finalHorizonte || this.posX < Constantes.comecoHorizonte){
+            this.posX = posInicial();  //redefino a criatura para uma posição aleatória de novo, acredito que pode dá uma dinâmica legal
         }
     }
 
     public Criatura criaturaMaisProx(Criatura[] criaturas){
         Criatura criaturaMaisProx = null;
-        double menorDist = 101;
+        double menorDist = Constantes.finalHorizonte;
         double distAtual;
         for(int i = 0; i < criaturas.length;i++){
             if(criaturas[i].id != this.id){
@@ -67,7 +66,8 @@ public class Criatura {
     }
     public void roubar(Criatura[] criaturas){
         Criatura criatura = criaturaMaisProx(criaturas);
-        criatura.ouro = criatura.ouro/2;
-        this.ouro += criatura.ouro;
+        this.ouro += Math.ceil(criatura.ouro/2);
+        criatura.ouro = Math.floor(criatura.ouro/2);
+
     }
 }
