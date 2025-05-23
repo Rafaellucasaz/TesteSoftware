@@ -8,10 +8,15 @@ Esse trabalho consiste em uma aplicação que simula n criaturas dentro de um ho
 ## Descrição
 
 
-Cada criatura vai iniciar em uma posição aleatória dentro do horizonte delimitado e vai iniciar com uma quantidade fixa de ouro(1000000).
-Cada criatura vai se movimentar uma vez por rodada, a movimentação é determinada por um número gerado aleatoriamente entre -1 e 1.
-Cada criatura vai roubar metade do ouro da criatura mais próxima dele.
-A simulação encerra quando o número de rodadas definido chegar ao fim.
+- Cada criatura vai iniciar em uma posição aleatória dentro do horizonte delimitado e vai iniciar com uma quantidade fixa de ouro(1000000).
+- Cada criatura vai se movimentar uma vez por rodada, a movimentação é determinada por um número gerado aleatoriamente entre -1 e 1.
+- Cada criatura vai roubar metade do ouro da criatura mais próxima dele.
+- A simulação encerra quando o número de rodadas definido chegar ao fim.
+
+
+
+
+
 
 
 
