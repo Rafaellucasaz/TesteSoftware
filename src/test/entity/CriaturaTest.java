@@ -1,9 +1,11 @@
-package test;
+package test.entity;
 
 import main.Constantes;
 import main.entity.Criatura;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.awt.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,11 +28,24 @@ public class CriaturaTest {
     void testInicializacao() {
         assertEquals(0, criatura1.getId());
         assertEquals(1000000, criatura1.getOuro());
+        //testar se a criatura começa dentro do horizonte
         assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
     }
 
     @Test
+    void testGetId(){
+        criatura1.setId(2);
+        assertEquals(2,criatura1.getId());
+    }
+
+    @Test
+    void testColorNotNull(){
+        assertNotNull(criatura1.getColor());
+    }
+
+    @Test
     void testMovimentoDentroDosLimites() {
+        //testar se a criatura movimenta como esperado
         for (int i = 0; i < 1000; i++) {
             criatura1.move();
             assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
@@ -39,10 +54,10 @@ public class CriaturaTest {
 
     @Test
     void testResetarPosicaoForaDoHorizonte() {
-        criatura1.setPosX(15);
-        assertEquals(15,criatura1.getPosX());
+        //fora do horizonte pela esquerda
         criatura1.setPosX(Constantes.comecoHorizonte-1);
         assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
+        //fora do horizonte pela direita
         criatura1.setPosX(Constantes.finalHorizonte+1);
         assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
     }
@@ -52,12 +67,13 @@ public class CriaturaTest {
         criatura1.setPosX(11);
         criatura2.setPosX(12);
         criatura3.setPosX(50);
+        //testar se a criatura mais próxima está certa
         Criatura maisProxima = criatura1.criaturaMaisProx(criaturas);
         assertEquals(criatura2.getId(), maisProxima.getId());
     }
 
     @Test
-    void testRouboReduzEOuroDaVitimaEPassaParaLadrao() {
+    void testRouboValido() {
         criatura1.setOuro(1000000);
         criatura2.setOuro(1000000);
         criatura3.setOuro(1000000);

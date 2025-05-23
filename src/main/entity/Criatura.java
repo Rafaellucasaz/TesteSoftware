@@ -90,6 +90,7 @@ public class Criatura {
         return criaturaMaisProx;
     }
     public void roubar(Criatura[] criaturas){
+
         Criatura criatura = criaturaMaisProx(criaturas);
         this.ouro += Math.ceil(criatura.ouro/2);
         criatura.ouro = Math.floor(criatura.ouro/2);

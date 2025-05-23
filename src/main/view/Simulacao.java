@@ -11,19 +11,19 @@ import java.awt.event.ActionListener;
 
 public class Simulacao extends JPanel {
 
-    private int rodadas;
-    private int nCriaturas;
-    private Criatura[] criaturas;
-    private Timer timer;
-    private int rodadaAtual = 1;
-    private boolean pause = false;
+    public int rodadas;
+    public int nCriaturas;
+    public Criatura[] criaturas;
+    public Timer timer;
+    public int rodadaAtual = 1;
+    public boolean pause = false;
 
 
-    private JPanel score;
-    private JPanel simulacao;
-    private JLabel[] scoreLabels;
-    private JLabel rodadaLabel;
-    private JButton pauseButton;
+    public JPanel score;
+    public JPanel simulacao;
+    public JLabel[] scoreLabels;
+    public JLabel rodadaLabel;
+    public JButton pauseButton;
 
 
     public Simulacao(JPanel mainPanel, CardLayout cardLayout) {
@@ -81,7 +81,37 @@ public class Simulacao extends JPanel {
         add(scrollPane,BorderLayout.CENTER);
     }
 
-    public void iniciarSimulacao(int rodadas,int nCriaturas){
+    public int iniciarSimulacao(int rodadas,int nCriaturas){
+
+        if(rodadas < 1){
+            Window window = SwingUtilities.getWindowAncestor(this);
+
+            if(window!= null){
+                window.dispose();
+            }
+
+
+            return 1;
+        }
+
+        if(nCriaturas <2){
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if(window!= null){
+                window.dispose();
+            }
+
+            return 1;
+        }
+
+        if(nCriaturas > 1000){
+            Window window = SwingUtilities.getWindowAncestor(this);
+            if (window != null) {
+                window.dispose();
+            }
+            return 1;
+        }
+
+
         this.rodadas = rodadas;
         this.nCriaturas = nCriaturas;
         criaturas = new Criatura[nCriaturas];
@@ -145,27 +175,13 @@ public class Simulacao extends JPanel {
 
                 if (rodadaAtual > rodadas) {
                     timer.stop();
-                    System.out.println("Simulação finalizada.");
                 }
             }
         });
         timer.start();
+        return 0;
     }
 
 
-    public int getnCriaturas() {
-        return nCriaturas;
-    }
 
-    public void setnCriaturas(int nCriaturas) {
-        this.nCriaturas = nCriaturas;
-    }
-
-    public int getRodadas() {
-        return rodadas;
-    }
-
-    public void setRodadas(int rodadas) {
-        this.rodadas = rodadas;
-    }
 }

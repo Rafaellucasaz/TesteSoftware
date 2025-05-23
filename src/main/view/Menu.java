@@ -65,6 +65,9 @@ public class Menu extends JPanel {
                 else if(Integer.parseInt(criaturas) < 2){
                     JOptionPane.showMessageDialog(this, "Número mínimo de criaturas é 2");
                 }
+                else if(Integer.parseInt(rodadas) < 1){
+                    JOptionPane.showMessageDialog(this, "Número mínimo de rodadas é 1");
+                }
                 else{
                     simulacao.iniciarSimulacao(Integer.parseInt(rodadas),Integer.parseInt(criaturas));
                     cardLayout.show(mainPanel, "telaSimulacao");
