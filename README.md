@@ -351,6 +351,7 @@ Esta suíte cobre:
 - Inicialização e atributos básicos (`ID`, `ouro`, `posição`, `cor`).
 - Regras de movimentação e limites.
 - Interação entre objetos (`criaturaMaisProx` e `roubar`).
+- Inicialização da simulação com os parametros corretos e incorretos.
 
 ---
 
