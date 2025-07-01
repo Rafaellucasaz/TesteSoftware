@@ -2,6 +2,7 @@ package test.entity;
 
 import main.Constantes;
 import main.entity.Criatura;
+import main.entity.Tipos;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +19,9 @@ public class CriaturaTest {
 
     @BeforeEach
     void setUp() {
-        criatura1 = new Criatura(0);
-        criatura2 = new Criatura(1);
-        criatura3 = new Criatura(2);
+        criatura1 = new Criatura(0, Tipos.minion,1000000);
+        criatura2 = new Criatura(1, Tipos.minion,1000000);
+        criatura3 = new Criatura(2, Tipos.minion,1000000);
         criaturas = new Criatura[]{criatura1, criatura2,criatura3};
     }
 

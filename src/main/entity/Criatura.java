@@ -4,17 +4,20 @@ import main.Constantes;
 
 import java.awt.*;
 
+
 public class Criatura {
 
     private int id;
     private double ouro;
     private double posX;
     private Color color;
+    private Tipos tipo;
 
-    public Criatura(int id){
-        this.id = id;
-        this.ouro = 1000000;
-        this.posX = posInicial();
+    public Criatura(int id,Tipos tipo,double ouro){
+        this.tipo = tipo;
+        setId(id);
+        setOuro(ouro);
+        setPosX(posInicial());
         randomColor();
     }
 

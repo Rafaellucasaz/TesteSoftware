@@ -2,6 +2,7 @@ package main.view;
 
 import main.Constantes;
 import main.entity.Criatura;
+import main.entity.Tipos;
 
 import javax.swing.*;
 import java.awt.*;
@@ -140,7 +141,7 @@ public class Simulacao extends JPanel {
         score.setLayout(new GridLayout(linhas, colunas));
 
         for (int i = 0; i < nCriaturas; i++) {
-            Criatura criatura = new Criatura(i);
+            Criatura criatura = new Criatura(i,Tipos.minion,1000000);
             criaturas[i] = criatura;
 
             JLabel scoreLabel = new JLabel("ID: " + i
