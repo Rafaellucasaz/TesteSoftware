@@ -3,7 +3,7 @@ package main.entity;
 import main.Constantes;
 
 import java.awt.*;
-
+import java.util.List;
 
 public class Criatura {
 
@@ -13,7 +13,7 @@ public class Criatura {
     private Color color;
     private Tipos tipo;
 
-    public Criatura(int id,Tipos tipo,double ouro){
+    public Criatura(int id, Tipos tipo, double ouro) {
         this.tipo = tipo;
         setId(id);
         setOuro(ouro);
@@ -34,13 +34,11 @@ public class Criatura {
     }
 
     public void setPosX(double posX) {
-        if(posX > Constantes.finalHorizonte || posX < Constantes.comecoHorizonte){
-            this.posX = posInicial();  //redefino a criatura para uma posição aleatória de novo, acredito que pode dá uma dinâmica legal
-        }
-        else{
+        if (posX > Constantes.finalHorizonte || posX < Constantes.comecoHorizonte) {
+            this.posX = posInicial();
+        } else {
             this.posX = posX;
         }
-
     }
 
     public int getId() {
@@ -59,44 +57,53 @@ public class Criatura {
         this.color = color;
     }
 
-
-    private void randomColor(){
-        int r = (int)(Math.random() * 256);
-        int g = (int)(Math.random() * 256);
-        int b = (int)(Math.random() * 256);
-        Color color = new Color(r, g, b);
-        setColor(color);
+    private void randomColor() {
+        int r = (int) (Math.random() * 256);
+        int g = (int) (Math.random() * 256);
+        int b = (int) (Math.random() * 256);
+        setColor(new Color(r, g, b));
     }
 
-    private double posInicial (){
+    private double posInicial() {
         return Constantes.comecoHorizonte + Math.random() * (Constantes.finalHorizonte - 10);
     }
 
-    public void move(){
-        double posX = this.posX + (Math.random() * 2) - 1;
-        setPosX(posX);
+    public void move() {
+        double novaPosX = this.posX + (Math.random() * 2) - 1;
+        setPosX(novaPosX);
     }
 
-    public Criatura criaturaMaisProx(Criatura[] criaturas){
+    public Criatura criaturaMaisProx(List<Criatura> criaturas) {
         Criatura criaturaMaisProx = null;
         double menorDist = Constantes.finalHorizonte;
         double distAtual;
-        for(int i = 0; i < criaturas.length;i++){
-            if(criaturas[i].id != this.id){
-                distAtual = Math.abs(criaturas[i].posX - this.posX);
-                if(distAtual < menorDist){
-                    criaturaMaisProx = criaturas[i];
+
+        for (Criatura c : criaturas) {
+            if (c.id != this.id) {
+                distAtual = Math.abs(c.posX - this.posX);
+                if (distAtual < menorDist) {
+                    criaturaMaisProx = c;
                     menorDist = distAtual;
                 }
             }
         }
+
+        if (menorDist <= 1) {
+            criaturas.remove(this);
+            criaturas.remove(criaturaMaisProx);
+            criaturas.add(new Criatura(criaturaMaisProx.getId(), Tipos.cluster, this.getOuro() + criaturaMaisProx.getOuro()));
+            return null;
+        }
+
         return criaturaMaisProx;
     }
-    public void roubar(Criatura[] criaturas){
 
+    public void roubar(List<Criatura> criaturas) {
         Criatura criatura = criaturaMaisProx(criaturas);
-        this.ouro += Math.ceil(criatura.ouro/2);
-        criatura.ouro = Math.floor(criatura.ouro/2);
-
+        if (criatura == null) {
+            return; // Cluster formado, não rouba
+        }
+        this.ouro += Math.ceil(criatura.ouro / 2);
+        criatura.ouro = Math.floor(criatura.ouro / 2);
     }
 }
