@@ -1,11 +1,16 @@
 package main.view;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 
 import main.Constantes;
+import main.dao.UsuarioDao;
+import main.dao.impl.UsuarioDaoImpl;
 import main.entity.Criatura;
 import main.entity.Tipos;
+import main.entity.Usuario;
+import main.util.SessionManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,6 +19,7 @@ import java.awt.event.ActionListener;
 
 public class Simulacao extends JPanel {
 
+    private UsuarioDao usuario;
     public int rodadas;
     public int nCriaturas;
     public List<Criatura> criaturas;
@@ -42,7 +48,21 @@ public class Simulacao extends JPanel {
                         int raio = 5;
 
                         g.setColor(c.getColor());
-                        g.fillOval(x, y, raio, raio);
+                        if(c.getTipo() == Tipos.minion){
+                            g.fillOval(x, y, raio, raio);
+                        }
+                        else if(c.getTipo() == Tipos.cluster){
+                            g.fillOval(x, y-10, raio*3, raio*3);
+                        }
+                        else if(c.getTipo() == Tipos.guardiao){
+                            g.fillRect(x,y-25,30,30);
+                            g.setColor(Color.BLACK);
+                            g.setFont(new Font("Arial", Font.BOLD, 20));
+                            FontMetrics fm = g.getFontMetrics();
+                            int textX = x + (30 - fm.stringWidth("g")) / 2;
+                            int textY = (y - 25) + ((30 - fm.getHeight()) / 2) + fm.getAscent();
+                            g.drawString("g", textX, textY);
+                        }
                         g.setColor(Color.BLACK);
 
                         g.drawLine((Constantes.comecoHorizonte * 10) - raio, 0, (Constantes.comecoHorizonte * 10) - raio, 400);
@@ -75,6 +95,16 @@ public class Simulacao extends JPanel {
     }
 
     public int iniciarSimulacao(int rodadas, int nCriaturas) {
+
+        Usuario usuario = SessionManager.getInstance().getLoggedInUser();
+        usuario.setQtdSimulacoes(usuario.getQtdSimulacoes()+1);
+        UsuarioDao usuarioDao = new UsuarioDaoImpl();
+
+        try {
+            usuarioDao.updateUsuario(usuario);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         if (rodadas < 1 || nCriaturas < 2 || nCriaturas > 1000) {
             Window window = SwingUtilities.getWindowAncestor(this);
@@ -125,7 +155,7 @@ public class Simulacao extends JPanel {
             scoreLabels[i] = scoreLabel;
             score.add(scoreLabel);
         }
-
+        criaturas.add(new Criatura(nCriaturas+1,Tipos.guardiao,0));
         score.revalidate();
         score.repaint();
 
@@ -148,6 +178,13 @@ public class Simulacao extends JPanel {
                 simulacao.repaint();
 
                 if (rodadaAtual > rodadas) {
+                    //usuario ganha 1 ponto por concluir a simulação
+                    usuario.setPontuacao(usuario.getPontuacao()+1);
+                    try {
+                        usuarioDao.updateUsuario(usuario);
+                    } catch (SQLException ex) {
+                        throw new RuntimeException(ex);
+                    }
                     timer.stop();
                 }
             }

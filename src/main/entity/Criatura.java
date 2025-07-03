@@ -57,6 +57,14 @@ public class Criatura {
         this.color = color;
     }
 
+    public Tipos getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipos tipo) {
+        this.tipo = tipo;
+    }
+
     private void randomColor() {
         int r = (int) (Math.random() * 256);
         int g = (int) (Math.random() * 256);
@@ -87,11 +95,24 @@ public class Criatura {
                 }
             }
         }
+        //distância mínima para a colisão
+        double dist;
+        if(this.getTipo() == Tipos.guardiao){
+            dist = 3;
+        }
+        else{
+            dist = 1;
+        }
+        if (menorDist <= dist ) {
+            if(this.getTipo() == Tipos.minion && criaturaMaisProx.getTipo() == Tipos.minion){
+                criaturas.remove(this);
+                criaturas.remove(criaturaMaisProx);
+                criaturas.add(new Criatura(criaturaMaisProx.getId(), Tipos.cluster, this.getOuro() + criaturaMaisProx.getOuro()));
 
-        if (menorDist <= 1) {
-            criaturas.remove(this);
-            criaturas.remove(criaturaMaisProx);
-            criaturas.add(new Criatura(criaturaMaisProx.getId(), Tipos.cluster, this.getOuro() + criaturaMaisProx.getOuro()));
+            }
+            else if(this.getTipo() == Tipos.guardiao && criaturaMaisProx.getTipo() == Tipos.cluster){
+                criaturas.remove(criaturaMaisProx);
+            }
             return null;
         }
 
