@@ -4,8 +4,10 @@ import main.Constantes;
 import main.entity.Criatura;
 import main.entity.Tipos;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,81 +15,170 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CriaturaTest {
 
-    Criatura criatura1;
-    Criatura criatura2;
-    Criatura criatura3;
-    List<Criatura> criaturas;
+    Criatura criaturaMinion;
+    Criatura criaturaGuardiao;
+    Criatura criaturaCluster;
 
     @BeforeEach
     void setUp() {
-        criatura1 = new Criatura(0, Tipos.minion, 1000000);
-        criatura2 = new Criatura(1, Tipos.minion, 1000000);
-        criatura3 = new Criatura(2, Tipos.minion, 1000000);
-        criaturas = new ArrayList<>();
-        criaturas.add(criatura1);
-        criaturas.add(criatura2);
-        criaturas.add(criatura3);
+        criaturaMinion = new Criatura(1, Tipos.minion, 10);
+        criaturaGuardiao = new Criatura(2, Tipos.guardiao, 20);
+        criaturaCluster = new Criatura(3, Tipos.cluster, 30);
+    }
+
+    // ---------------- Testes de Domínio ----------------
+
+    @Test
+    void testConstrutorAtributosBasicos() {
+        assertEquals(1, criaturaMinion.getId());
+        assertEquals(Tipos.minion, criaturaMinion.getTipo());
+        assertEquals(10, criaturaMinion.getOuro());
+        assertNotNull(criaturaMinion.getColor());
     }
 
     @Test
-    void testInicializacao() {
-        assertEquals(0, criatura1.getId());
-        assertEquals(1000000, criatura1.getOuro());
-        assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
+    void testSetGetOuro() {
+        criaturaMinion.setOuro(50);
+        assertEquals(50, criaturaMinion.getOuro());
     }
 
     @Test
-    void testGetId() {
-        criatura1.setId(2);
-        assertEquals(2, criatura1.getId());
+    void testSetGetId() {
+        criaturaMinion.setId(99);
+        assertEquals(99, criaturaMinion.getId());
     }
 
     @Test
-    void testColorNotNull() {
-        assertNotNull(criatura1.getColor());
+    void testSetGetTipo() {
+        criaturaMinion.setTipo(Tipos.guardiao);
+        assertEquals(Tipos.guardiao, criaturaMinion.getTipo());
     }
 
     @Test
-    void testMovimentoDentroDosLimites() {
-        for (int i = 0; i < 1000; i++) {
-            criatura1.move();
-            assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
+    void testSetGetColor() {
+        Color novaCor = new Color(100, 150, 200);
+        criaturaMinion.setColor(novaCor);
+        assertEquals(novaCor, criaturaMinion.getColor());
+    }
+
+    // ---------------- Testes de Fronteira para posX ----------------
+
+    @Test
+    void testSetPosXDentroDosLimites() {
+        double meio = (Constantes.comecoHorizonte + Constantes.finalHorizonte) / 2;
+        criaturaMinion.setPosX(meio);
+        assertEquals(meio, criaturaMinion.getPosX());
+    }
+
+    @Test
+    void testSetPosXMenorQueInicioReseta() {
+        criaturaMinion.setPosX(Constantes.comecoHorizonte - 5);
+        assertTrue(criaturaMinion.getPosX() >= Constantes.comecoHorizonte);
+    }
+
+    @Test
+    void testSetPosXMaiorQueFinalReseta() {
+        criaturaMinion.setPosX(Constantes.finalHorizonte + 5);
+        assertTrue(criaturaMinion.getPosX() >= Constantes.comecoHorizonte);
+    }
+
+    // ---------------- Testes Estruturais e MC/DC ----------------
+
+    @Test
+    void testMoveDentroDosLimites() {
+        for (int i = 0; i < 100; i++) {  // repete para garantir casos aleatórios
+            criaturaMinion.setPosX((Constantes.comecoHorizonte + Constantes.finalHorizonte) / 2);
+            criaturaMinion.move();
+            assertTrue(criaturaMinion.getPosX() >= Constantes.comecoHorizonte);
+            assertTrue(criaturaMinion.getPosX() <= Constantes.finalHorizonte);
         }
     }
 
     @Test
-    void testResetarPosicaoForaDoHorizonte() {
-        criatura1.setPosX(Constantes.comecoHorizonte - 1);
-        assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
+    void testCriaturaMaisProximaRetornaCorreto() {
+        Criatura outra = new Criatura(5, Tipos.minion, 15);
+        outra.setPosX(criaturaMinion.getPosX() + 0.5);
 
-        criatura1.setPosX(Constantes.finalHorizonte + 1);
-        assertTrue(criatura1.getPosX() >= Constantes.comecoHorizonte && criatura1.getPosX() <= Constantes.finalHorizonte);
+        List<Criatura> lista = new ArrayList<>();
+        lista.add(criaturaMinion);
+        lista.add(outra);
+
+        Criatura prox = criaturaMinion.criaturaMaisProx(lista);
+        assertEquals(outra, prox);
     }
 
     @Test
-    void testCriaturaMaisProxima() {
-        criatura1.setPosX(11);
-        criatura2.setPosX(12);
-        criatura3.setPosX(50);
+    void testCriaturaMaisProximaClusterFormadoRemoveMinions() {
+        Criatura minion2 = new Criatura(5, Tipos.minion, 15);
+        minion2.setPosX(criaturaMinion.getPosX() + 0.5);
 
-        Criatura maisProxima = criatura1.criaturaMaisProx(criaturas);
-        assertEquals(criatura2.getId(), maisProxima.getId());
+        List<Criatura> lista = new ArrayList<>();
+        lista.add(criaturaMinion);
+        lista.add(minion2);
+
+        Criatura resultado = criaturaMinion.criaturaMaisProx(lista);
+        assertNull(resultado);
+        assertEquals(1, lista.size());
+        assertEquals(Tipos.cluster, lista.get(0).getTipo());
+        assertEquals(25, lista.get(0).getOuro());
     }
 
     @Test
-    void testRouboValido() {
-        criatura1.setOuro(1000000);
-        criatura2.setOuro(1000000);
-        criatura3.setOuro(1000000);
+    void testCriaturaMaisProximaGuardiaoEliminaCluster() {
+        Criatura cluster = new Criatura(8, Tipos.cluster, 40);
+        cluster.setPosX(criaturaGuardiao.getPosX() + 2);
 
-        criatura1.setPosX(11);
-        criatura2.setPosX(12);
-        criatura3.setPosX(50);
+        List<Criatura> lista = new ArrayList<>();
+        lista.add(criaturaGuardiao);
+        lista.add(cluster);
 
-        criatura1.roubar(criaturas);
+        Criatura resultado = criaturaGuardiao.criaturaMaisProx(lista);
+        assertNull(resultado);
+        assertEquals(1, lista.size());
+        assertEquals(criaturaGuardiao, lista.get(0));
+    }
 
-        assertEquals(1500000, criatura1.getOuro());
-        assertEquals(500000, criatura2.getOuro());
-        assertEquals(1000000, criatura3.getOuro());
+    // ---------------- Testes do roubo ----------------
+
+    @Test
+    void testRoubarDivideOuroCorretamente() {
+        Criatura alvo = new Criatura(10, Tipos.minion, 10);
+        alvo.setPosX(criaturaMinion.getPosX() + 0.8);
+
+        List<Criatura> lista = new ArrayList<>();
+        lista.add(criaturaMinion);
+        lista.add(alvo);
+
+        criaturaMinion.roubar(lista);
+
+        assertEquals(10 + 5, criaturaMinion.getOuro());
+        assertEquals(5, alvo.getOuro());
+    }
+
+    @Test
+    void testRoubarNaoFazNadaSeClusterFormado() {
+        Criatura minion2 = new Criatura(20, Tipos.minion, 10);
+        minion2.setPosX(criaturaMinion.getPosX() + 0.5);
+
+        List<Criatura> lista = new ArrayList<>();
+        lista.add(criaturaMinion);
+        lista.add(minion2);
+
+        criaturaMinion.roubar(lista);
+
+        // Como o cluster é formado, não ocorre roubo
+        assertEquals(1, lista.size());
+        assertEquals(Tipos.cluster, lista.get(0).getTipo());
+    }
+
+    // ---------------- Testes Baseados em Propriedades ----------------
+
+    @RepeatedTest(20)
+    void testCorGeradaEstaDentroDosLimites() {
+        Criatura c = new Criatura(30, Tipos.minion, 5);
+        Color cor = c.getColor();
+        assertTrue(cor.getRed() >= 0 && cor.getRed() <= 255);
+        assertTrue(cor.getGreen() >= 0 && cor.getGreen() <= 255);
+        assertTrue(cor.getBlue() >= 0 && cor.getBlue() <= 255);
     }
 }
