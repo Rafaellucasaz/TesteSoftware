@@ -15,7 +15,7 @@ public class Login extends JPanel{
     private JButton loginButton;
     private JButton registerButton;
 
-    private UsuarioDaoImpl usuarioDAO;
+    protected UsuarioDaoImpl usuarioDAO;
 
 
     private JPanel mainPanel;

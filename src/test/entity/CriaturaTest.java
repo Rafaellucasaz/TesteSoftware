@@ -156,6 +156,56 @@ public class CriaturaTest {
     }
 
     @Test
+    void testRoubarDeMinionAumentaEOuroEReduzDoOutro() {
+        Criatura c1 = new Criatura(100, Tipos.minion, 40);
+        Criatura c2 = new Criatura(200, Tipos.minion, 20);
+        c2.setPosX(c1.getPosX() + 2);
+
+        List<Criatura> criaturas = new ArrayList<>();
+        criaturas.add(c1);
+        criaturas.add(c2);
+
+        c1.roubar(criaturas);
+
+        assertEquals(40 + 10, c1.getOuro());
+        assertEquals(10, c2.getOuro());
+    }
+
+    @Test
+    void testRoubarDeGuardiaoNaoAlteraOuro() {
+        Criatura c1 = new Criatura(101, Tipos.minion, 50);
+        Criatura guardiao = new Criatura(102, Tipos.guardiao, 100);
+        guardiao.setPosX(c1.getPosX() + 2);
+
+        List<Criatura> criaturas = new ArrayList<>();
+        criaturas.add(c1);
+        criaturas.add(guardiao);
+
+        c1.roubar(criaturas);
+
+        assertEquals(50, c1.getOuro());
+        assertEquals(100, guardiao.getOuro());
+    }
+
+    @Test
+    void testRoubarComClusterNaoExecutaRoubo() {
+        Criatura c1 = new Criatura(103, Tipos.minion, 30);
+        Criatura c2 = new Criatura(104, Tipos.minion, 30);
+        c2.setPosX(c1.getPosX() + 0.4);
+
+        List<Criatura> criaturas = new ArrayList<>();
+        criaturas.add(c1);
+        criaturas.add(c2);
+
+        c1.roubar(criaturas);
+
+        assertEquals(1, criaturas.size());
+        Criatura novoCluster = criaturas.get(0);
+        assertEquals(Tipos.cluster, novoCluster.getTipo());
+        assertEquals(60, novoCluster.getOuro());
+    }
+
+    @Test
     void testRoubarNaoFazNadaSeClusterFormado() {
         Criatura minion2 = new Criatura(20, Tipos.minion, 10);
         minion2.setPosX(criaturaMinion.getPosX() + 0.5);

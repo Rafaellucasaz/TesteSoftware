@@ -3,6 +3,7 @@ package test.view;
 import main.Constantes;
 import main.dao.UsuarioDao;
 import main.entity.Criatura;
+import main.entity.Tipos;
 import main.entity.Usuario;
 import main.util.SessionManager;
 import main.view.Simulacao;
@@ -22,7 +23,7 @@ public class SimulacaoTest {
     @BeforeEach
     void setUp() {
         // Mock da sessão do usuário para evitar banco real
-        usuarioFake = new Usuario("teste", "teste123");
+        usuarioFake = new Usuario("usu1","senha123","avatar1",0,0);
         usuarioFake.setPontuacao(0);
         usuarioFake.setQtdSimulacoes(0);
 
@@ -32,42 +33,36 @@ public class SimulacaoTest {
 
     @Test
     void testIniciarSimulacaoValoresValidos() {
-        int result = simulacao.iniciarSimulacao(5, 10);
+        int result = simulacao.iniciarSimulacao( 10);
         assertEquals(0, result);
         assertEquals(10, simulacao.nCriaturas);
-        assertEquals(5, simulacao.rodadas);
         assertNotNull(simulacao.criaturas);
         assertEquals(11, simulacao.criaturas.size()); // 10 minions + 1 guardião
     }
 
     @Test
     void testIniciarSimulacaoCriaturasMinimo() {
-        assertEquals(0, simulacao.iniciarSimulacao(5, 2));
+        assertEquals(0, simulacao.iniciarSimulacao( 2));
     }
 
     @Test
     void testIniciarSimulacaoCriaturasMaximo() {
-        assertEquals(0, simulacao.iniciarSimulacao(5, 1000));
+        assertEquals(0, simulacao.iniciarSimulacao( 1000));
     }
 
     @Test
     void testMenosDe2Criaturas() {
-        assertEquals(1, simulacao.iniciarSimulacao(5, 1));
+        assertEquals(1, simulacao.iniciarSimulacao( 1));
     }
 
     @Test
     void testMaisDe1000Criaturas() {
-        assertEquals(1, simulacao.iniciarSimulacao(5, 1001));
-    }
-
-    @Test
-    void testMenosDe1Rodada() {
-        assertEquals(1, simulacao.iniciarSimulacao(0, 50));
+        assertEquals(1, simulacao.iniciarSimulacao( 1001));
     }
 
     @Test
     void testPausarRetomarSimulacao() {
-        simulacao.iniciarSimulacao(5, 10);
+        simulacao.iniciarSimulacao( 10);
 
         // Pausar
         simulacao.pauseButton.doClick();
@@ -80,28 +75,79 @@ public class SimulacaoTest {
         assertEquals("Pausar simulação", simulacao.pauseButton.getText());
     }
 
-    @Test
-    void testLabelsSaoAtualizados() {
-        simulacao.iniciarSimulacao(5, 10);
 
-        for (int i = 0; i < 10; i++) {
-            Criatura c = simulacao.criaturas.get(i);
-            String textoEsperado = "ID: " + i + " | posX: " + String.format("%.2f", c.getPosX()) + " | ouro: " + c.getOuro();
-            assertEquals(textoEsperado, simulacao.scoreLabels[i].getText());
-        }
-    }
 
     @Test
     void testUsuarioAtualizaQtdSimulacoes() {
         assertEquals(0, usuarioFake.getQtdSimulacoes());
-        simulacao.iniciarSimulacao(5, 10);
+        simulacao.iniciarSimulacao(10);
         assertEquals(1, usuarioFake.getQtdSimulacoes());
     }
 
     @Test
     void testCriaturasAdicionadasCorretamente() {
-        simulacao.iniciarSimulacao(5, 5);
+        simulacao.iniciarSimulacao( 5);
         assertEquals(6, simulacao.criaturas.size()); // 5 minions + 1 guardião
         assertEquals(Tipos.guardiao, simulacao.criaturas.get(5).getTipo());
     }
+
+    @Test
+    void testUpdateScoreboardAposSimulacao() {
+        simulacao.iniciarSimulacao(3);
+
+        // transformar um minion em cluster
+        Criatura criaturaCluster = simulacao.criaturas.get(0);
+        criaturaCluster.setTipo(Tipos.cluster);
+
+        simulacao.updateScoreboard(); // forçar atualização
+
+        assertEquals(2, simulacao.minionCount);
+        assertEquals(1, simulacao.clusterCount);
+        assertEquals(1, simulacao.guardiaoCount);
+    }
+
+    @Test
+    void testSimulacaoFinalizadaComZeroMinions() {
+        simulacao.iniciarSimulacao(3);
+        for (Criatura c : simulacao.criaturas) {
+            if (c.getTipo() == Tipos.minion) {
+                c.setTipo(Tipos.cluster);
+            }
+        }
+        simulacao.updateScoreboard();
+        assertTrue(simulacao.simulacaoFinalizada());
+    }
+
+    @Test
+    void testSimulacaoFinalizadaComZeroClusters() {
+        simulacao.iniciarSimulacao(3);
+        for (Criatura c : simulacao.criaturas) {
+            if (c.getTipo() == Tipos.cluster) {
+                c.setTipo(Tipos.minion);
+            }
+        }
+        simulacao.updateScoreboard();
+        assertTrue(simulacao.simulacaoFinalizada());
+    }
+
+    @Test
+    void testSimulacaoSucedidaComApenasMinionsEGuardiao() {
+        simulacao.iniciarSimulacao(4);
+        for (Criatura c : simulacao.criaturas) {
+            if (c.getTipo() == Tipos.minion) {
+                c.setTipo(Tipos.minion);
+            }
+        }
+        assertTrue(simulacao.simulacaoSucedida());
+    }
+
+    @Test
+    void testSimulacaoSucedidaFalsaComClusterPresente() {
+        simulacao.iniciarSimulacao(5);
+        Criatura c = simulacao.criaturas.get(0);
+        c.setTipo(Tipos.cluster);
+        assertFalse(simulacao.simulacaoSucedida());
+    }
+
+
 }

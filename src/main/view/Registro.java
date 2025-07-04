@@ -11,15 +11,15 @@ import java.sql.SQLException;
 
 public class Registro extends JPanel {
 
-    private JPanel mainPanel;
-    private CardLayout cardLayout;
+    public JPanel mainPanel;
+    public CardLayout cardLayout;
 
-    private JTextField loginField;
-    private JPasswordField senhaField;
-    private JComboBox<String> avatarComboBox;
-    private JButton registerButton;
+    public JTextField loginField;
+    public JPasswordField senhaField;
+    public JComboBox<String> avatarComboBox;
+    public JButton registerButton;
 
-    private UsuarioDaoImpl usuarioDAO;
+    public UsuarioDaoImpl usuarioDAO;
 
 
     public Registro(JPanel mainPanel, CardLayout cardLayout) {

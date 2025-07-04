@@ -22,12 +22,12 @@ public class Main  {
 
         CardLayout cardLayout = new CardLayout();
         JPanel mainPanel = new JPanel(cardLayout);
-
+        Estatisticas telaEstatisticas = new Estatisticas(mainPanel,cardLayout);
         Simulacao telaSimulacao = new Simulacao(mainPanel, cardLayout);
-        Menu telaInicial = new Menu(telaSimulacao,mainPanel, cardLayout);
+        Menu telaInicial = new Menu(telaSimulacao,telaEstatisticas,mainPanel, cardLayout);
         Login telaLogin = new Login(telaInicial,mainPanel,cardLayout);
         Registro telaRegistro = new Registro(mainPanel,cardLayout);
-        Estatisticas telaEstatisticas = new Estatisticas(mainPanel,cardLayout);
+
         mainPanel.add(telaLogin,"telaLogin");
         mainPanel.add(telaInicial, "telaInicial");
         mainPanel.add(telaSimulacao, "telaSimulacao");

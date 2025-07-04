@@ -28,14 +28,14 @@ public class Menu extends JPanel {
         }
     }
 
-    private JTextField rodadasField;
     private JTextField criaturasField;
     private JButton iniciarButton;
     private JButton estatisticasButton;
     private JLabel userLabel;
     private Simulacao simulacao;
+    private Estatisticas telaEstatisticas;
 
-    public Menu(Simulacao simulacao, JPanel mainPanel, CardLayout cardLayout) {
+    public Menu(Simulacao simulacao, Estatisticas telaEstatisticas,JPanel mainPanel, CardLayout cardLayout) {
         this.simulacao = simulacao;
         setLayout(new BorderLayout());
 
@@ -57,18 +57,15 @@ public class Menu extends JPanel {
         JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Usando FlowLayout para o formulário
         formPanel.setBackground(new Color(240, 248, 255)); // Mesma cor de fundo
 
-        rodadasField = new JTextField(5);
         criaturasField = new JTextField(5);
         iniciarButton = new JButton("Iniciar");
         estatisticasButton = new JButton("Estatísticas");
 
 
 
-        ((AbstractDocument) rodadasField.getDocument()).setDocumentFilter(new NumericFilter());
+
         ((AbstractDocument) criaturasField.getDocument()).setDocumentFilter(new NumericFilter());
 
-        formPanel.add(new JLabel("Número de rodadas:"));
-        formPanel.add(rodadasField);
 
         formPanel.add(new JLabel("Número de criaturas:"));
         formPanel.add(criaturasField);
@@ -81,21 +78,20 @@ public class Menu extends JPanel {
 
 
         iniciarButton.addActionListener(e -> {
-            String rodadas = rodadasField.getText();
+
             String criaturas = criaturasField.getText();
 
-            if (!rodadas.isEmpty() && !criaturas.isEmpty()) {
+            if ( !criaturas.isEmpty()) {
                 int numCriaturas = Integer.parseInt(criaturas);
-                int numRodadas = Integer.parseInt(rodadas);
+
 
                 if (numCriaturas > 1000) {
                     JOptionPane.showMessageDialog(this, "Número máximo de criaturas é 1000", "Erro de Entrada", JOptionPane.WARNING_MESSAGE);
                 } else if (numCriaturas < 2) {
                     JOptionPane.showMessageDialog(this, "Número mínimo de criaturas é 2", "Erro de Entrada", JOptionPane.WARNING_MESSAGE);
-                } else if (numRodadas < 1) {
-                    JOptionPane.showMessageDialog(this, "Número mínimo de rodadas é 1", "Erro de Entrada", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    simulacao.iniciarSimulacao(numRodadas, numCriaturas);
+                }
+                else {
+                    simulacao.iniciarSimulacao(numCriaturas);
                     cardLayout.show(mainPanel, "telaSimulacao");
                 }
             } else {
@@ -104,6 +100,7 @@ public class Menu extends JPanel {
         });
 
         estatisticasButton.addActionListener(e -> {
+            telaEstatisticas.carregarEstatisticas();
             cardLayout.show(mainPanel,"telaEstatisticas");
         });
     }

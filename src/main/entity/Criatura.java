@@ -111,6 +111,7 @@ public class Criatura {
 
             }
             else if(this.getTipo() == Tipos.guardiao && criaturaMaisProx.getTipo() == Tipos.cluster){
+                this.setOuro(criaturaMaisProx.getOuro());
                 criaturas.remove(criaturaMaisProx);
             }
             return null;
@@ -124,7 +125,10 @@ public class Criatura {
         if (criatura == null) {
             return; // Cluster formado, não rouba
         }
-        this.ouro += Math.ceil(criatura.ouro / 2);
-        criatura.ouro = Math.floor(criatura.ouro / 2);
+        if(criatura.getTipo()!= Tipos.guardiao){
+            this.ouro += Math.ceil(criatura.ouro / 2);
+            criatura.ouro = Math.floor(criatura.ouro / 2);
+        }
+
     }
 }

@@ -13,7 +13,7 @@ public class Estatisticas extends JPanel{
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
-    private UsuarioDaoImpl usuarioDAO;
+    protected UsuarioDaoImpl usuarioDAO;
     private JTable statsTable;
     private DefaultTableModel tableModel;
     private JLabel totalSimulationsLabel;
@@ -90,10 +90,10 @@ public class Estatisticas extends JPanel{
         backButton.addActionListener(e -> {
             cardLayout.show(mainPanel, "telaInicial");
         });
-        loadStatistics();
+        carregarEstatisticas();
     }
 
-    private void loadStatistics() {
+    public void carregarEstatisticas() {
         tableModel.setRowCount(0);
         long totalSimulations = 0;
         long totalScore = 0;
