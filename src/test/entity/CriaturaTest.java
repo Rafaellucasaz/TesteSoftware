@@ -1,6 +1,6 @@
 package test.entity;
 
-import main.Constantes;
+import main.entity.Horizonte;
 import main.entity.Criatura;
 import main.entity.Tipos;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,21 +65,21 @@ public class CriaturaTest {
 
     @Test
     void testSetPosXDentroDosLimites() {
-        double meio = (Constantes.comecoHorizonte + Constantes.finalHorizonte) / 2;
+        double meio = (Horizonte.comecoHorizonte + Horizonte.finalHorizonte) / 2;
         criaturaMinion.setPosX(meio);
         assertEquals(meio, criaturaMinion.getPosX());
     }
 
     @Test
     void testSetPosXMenorQueInicioReseta() {
-        criaturaMinion.setPosX(Constantes.comecoHorizonte - 5);
-        assertTrue(criaturaMinion.getPosX() >= Constantes.comecoHorizonte);
+        criaturaMinion.setPosX(Horizonte.comecoHorizonte - 5);
+        assertTrue(criaturaMinion.getPosX() >= Horizonte.comecoHorizonte);
     }
 
     @Test
     void testSetPosXMaiorQueFinalReseta() {
-        criaturaMinion.setPosX(Constantes.finalHorizonte + 5);
-        assertTrue(criaturaMinion.getPosX() >= Constantes.comecoHorizonte);
+        criaturaMinion.setPosX(Horizonte.finalHorizonte + 5);
+        assertTrue(criaturaMinion.getPosX() >= Horizonte.comecoHorizonte);
     }
 
     // ---------------- Testes Estruturais e MC/DC ----------------
@@ -87,10 +87,10 @@ public class CriaturaTest {
     @Test
     void testMoveDentroDosLimites() {
         for (int i = 0; i < 100; i++) {  // repete para garantir casos aleatórios
-            criaturaMinion.setPosX((Constantes.comecoHorizonte + Constantes.finalHorizonte) / 2);
+            criaturaMinion.setPosX((Horizonte.comecoHorizonte + Horizonte.finalHorizonte) / 2);
             criaturaMinion.move();
-            assertTrue(criaturaMinion.getPosX() >= Constantes.comecoHorizonte);
-            assertTrue(criaturaMinion.getPosX() <= Constantes.finalHorizonte);
+            assertTrue(criaturaMinion.getPosX() >= Horizonte.comecoHorizonte);
+            assertTrue(criaturaMinion.getPosX() <= Horizonte.finalHorizonte);
         }
     }
 

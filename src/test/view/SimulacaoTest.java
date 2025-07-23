@@ -1,12 +1,9 @@
 package test.view;
 
-import main.Constantes;
-import main.dao.UsuarioDao;
 import main.entity.Criatura;
 import main.entity.Tipos;
 import main.entity.Usuario;
 import main.util.SessionManager;
-import main.view.Simulacao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

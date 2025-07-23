@@ -3,8 +3,6 @@ package test.view;
 import main.dao.impl.UsuarioDaoImpl;
 import main.entity.Usuario;
 import main.util.SessionManager;
-import main.view.Login;
-import main.view.Menu;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

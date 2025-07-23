@@ -1,0 +1,6 @@
+2025-07-23 14:39:48.907127-03:00 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO usuarios (login, senha, avatarURL, pontuacao, qtdSimulacoes) VALUES (?, ?, ?, ?, ?) [*]RETURNING id;"; SQL statement:
+INSERT INTO usuarios (login, senha, avatarURL, pontuacao, qtdSimulacoes) VALUES (?, ?, ?, ?, ?) RETURNING id; [42000-224]
+2025-07-23 14:40:10.445977-03:00 jdbc[10]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "INSERT INTO usuarios (login, senha, avatarURL, pontuacao, qtdSimulacoes) VALUES (?, ?, ?, ?, ?) [*]RETURNING id;"; SQL statement:
+INSERT INTO usuarios (login, senha, avatarURL, pontuacao, qtdSimulacoes) VALUES (?, ?, ?, ?, ?) RETURNING id; [42000-224]

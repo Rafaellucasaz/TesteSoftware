@@ -1,6 +1,7 @@
 package main.entity;
 
-import main.Constantes;
+
+import main.entity.Horizonte;
 
 import java.awt.*;
 import java.util.List;
@@ -21,6 +22,14 @@ public class Criatura {
         randomColor();
     }
 
+    public Criatura(int id, Tipos tipo, double ouro, double posX) {
+        this.tipo = tipo;
+        setId(id);
+        setOuro(ouro);
+        setPosX(posX);
+        randomColor();
+    }
+
     public double getOuro() {
         return ouro;
     }
@@ -34,7 +43,7 @@ public class Criatura {
     }
 
     public void setPosX(double posX) {
-        if (posX > Constantes.finalHorizonte || posX < Constantes.comecoHorizonte) {
+        if (posX > Horizonte.finalHorizonte || posX < Horizonte.comecoHorizonte) {
             this.posX = posInicial();
         } else {
             this.posX = posX;
@@ -73,7 +82,7 @@ public class Criatura {
     }
 
     private double posInicial() {
-        return Constantes.comecoHorizonte + Math.random() * (Constantes.finalHorizonte - 10);
+        return Horizonte.comecoHorizonte + Math.random() * (Horizonte.finalHorizonte - Horizonte.comecoHorizonte);
     }
 
     public void move() {
@@ -83,7 +92,7 @@ public class Criatura {
 
     public Criatura criaturaMaisProx(List<Criatura> criaturas) {
         Criatura criaturaMaisProx = null;
-        double menorDist = Constantes.finalHorizonte;
+        double menorDist = Horizonte.finalHorizonte;
         double distAtual;
 
         for (Criatura c : criaturas) {
@@ -104,10 +113,10 @@ public class Criatura {
             dist = 1;
         }
         if (menorDist <= dist ) {
-            if(this.getTipo() == Tipos.minion && criaturaMaisProx.getTipo() == Tipos.minion){
+            if(this.getTipo() == Tipos.minion && (criaturaMaisProx.getTipo() == Tipos.minion || criaturaMaisProx.getTipo() == Tipos.cluster)){
                 criaturas.remove(this);
                 criaturas.remove(criaturaMaisProx);
-                criaturas.add(new Criatura(criaturaMaisProx.getId(), Tipos.cluster, this.getOuro() + criaturaMaisProx.getOuro()));
+                criaturas.add(new Criatura(criaturaMaisProx.getId(), Tipos.cluster, this.getOuro() + criaturaMaisProx.getOuro(), this.getPosX()));
 
             }
             else if(this.getTipo() == Tipos.guardiao && criaturaMaisProx.getTipo() == Tipos.cluster){

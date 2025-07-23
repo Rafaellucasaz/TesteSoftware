@@ -1,6 +1,5 @@
 package main.dao.impl;
 
-
 import main.dao.UsuarioDao;
 import main.entity.Usuario;
 import main.util.Db;
@@ -9,17 +8,19 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Statement; // Importe Statement se ainda não estiver
 import java.util.ArrayList;
 import java.util.List;
-public class UsuarioDaoImpl implements UsuarioDao{
+
+public class UsuarioDaoImpl implements UsuarioDao {
     @Override
     public Usuario addUsuario(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO usuarios (login, senha, avatarURL, pontuacao, qtdSimulacoes) VALUES (?, ?, ?, ?, ?) RETURNING id;";
 
+        String sql = "INSERT INTO usuarios (login, senha, avatarURL, pontuacao, qtdSimulacoes) VALUES (?, ?, ?, ?, ?);";
 
         try (Connection conn = Db.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, usuario.getLogin());
             pstmt.setString(2, usuario.getSenha());
@@ -28,12 +29,16 @@ public class UsuarioDaoImpl implements UsuarioDao{
             pstmt.setInt(5, usuario.getQtdSimulacoes());
 
 
-            try (ResultSet rs = pstmt.executeQuery()) {
+            pstmt.executeUpdate();
+
+
+            try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    usuario.setId(rs.getInt("id"));
+                    // O ID gerado geralmente está na primeira coluna
+                    usuario.setId(rs.getInt(1));
                 }
             }
-            System.out.println("Usuário adicionado: " + usuario.getLogin());
+            System.out.println("Usuário adicionado: " + usuario.getLogin() + " com ID: " + usuario.getId());
             return usuario;
 
         } catch (SQLException e) {
@@ -41,6 +46,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
             throw e;
         }
     }
+
     @Override
     public Usuario getUsuarioById(int id) throws SQLException {
         String sql = "SELECT id, login, senha, avatarURL, pontuacao, qtdSimulacoes FROM usuarios WHERE id = ?;";
@@ -49,7 +55,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
         try (Connection conn = Db.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id); // Define o ID como parâmetro
+            pstmt.setInt(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
@@ -108,7 +114,6 @@ public class UsuarioDaoImpl implements UsuarioDao{
         try (Connection conn = Db.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-
             pstmt.setString(1, usuario.getLogin());
             pstmt.setString(2, usuario.getSenha());
             pstmt.setString(3, usuario.getAvatarURL());
@@ -125,6 +130,7 @@ public class UsuarioDaoImpl implements UsuarioDao{
             throw e;
         }
     }
+
     @Override
     public boolean deleteUsuario(int id) throws SQLException {
         String sql = "DELETE FROM usuarios WHERE id = ?;";
@@ -144,7 +150,6 @@ public class UsuarioDaoImpl implements UsuarioDao{
         }
     }
 
-
     @Override
     public List<Usuario> getAllUsuarios() throws SQLException {
         String sql = "SELECT id, login, senha, avatarURL, pontuacao, qtdSimulacoes FROM usuarios;";
@@ -155,7 +160,6 @@ public class UsuarioDaoImpl implements UsuarioDao{
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-
                 Usuario usuario = new Usuario(
                         rs.getInt("id"),
                         rs.getString("login"),

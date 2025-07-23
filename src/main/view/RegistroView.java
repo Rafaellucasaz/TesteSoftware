@@ -1,40 +1,26 @@
 package main.view;
 
-import main.dao.impl.UsuarioDaoImpl;
-import main.entity.Usuario;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
+import java.awt.event.ActionListener; // Importe ActionListener
 
-public class Registro extends JPanel {
+public class RegistroView extends JPanel {
 
-    public JPanel mainPanel;
-    public CardLayout cardLayout;
-
+    // Estes componentes são public para que o Controller possa acessá-los
     public JTextField loginField;
     public JPasswordField senhaField;
     public JComboBox<String> avatarComboBox;
     public JButton registerButton;
+    public JButton backButton; // Adicionado para o controller manipular
 
-    public UsuarioDaoImpl usuarioDAO;
-
-
-    public Registro(JPanel mainPanel, CardLayout cardLayout) {
-        this.mainPanel = mainPanel;
-        this.cardLayout = cardLayout;
-        this.usuarioDAO = new UsuarioDaoImpl();
+    public RegistroView() {
         setLayout(new BorderLayout());
         setBackground(new Color(240, 248, 255));
-
 
         JLabel titleLabel = new JLabel("Criar Novo usuário", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         titleLabel.setForeground(new Color(60, 63, 65));
         add(titleLabel, BorderLayout.NORTH);
-
 
         JPanel contentPanel = new JPanel(new GridBagLayout());
         contentPanel.setBackground(new Color(224, 255, 255));
@@ -42,7 +28,6 @@ public class Registro extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
 
         JLabel loginLabel = new JLabel("Login:");
         loginLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -58,7 +43,6 @@ public class Registro extends JPanel {
         gbc.anchor = GridBagConstraints.LINE_START;
         contentPanel.add(loginField, gbc);
 
-
         JLabel senhaLabel = new JLabel("Senha:");
         senhaLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
@@ -72,7 +56,6 @@ public class Registro extends JPanel {
         gbc.gridy = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         contentPanel.add(senhaField, gbc);
-
 
         JLabel avatarLabel = new JLabel("Escolha seu Avatar:");
         avatarLabel.setFont(new Font("Arial", Font.PLAIN, 14));
@@ -89,7 +72,6 @@ public class Registro extends JPanel {
         gbc.anchor = GridBagConstraints.LINE_START;
         contentPanel.add(avatarComboBox, gbc);
 
-
         registerButton = new JButton("Registrar");
         registerButton.setFont(new Font("Arial", Font.BOLD, 16));
         registerButton.setBackground(new Color(34, 139, 34));
@@ -102,11 +84,9 @@ public class Registro extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         contentPanel.add(registerButton, gbc);
 
-
-        JButton backButton = new JButton("Voltar ao Login");
+        backButton = new JButton("Voltar ao Login"); // Renomeado e tornado public para o controller
         backButton.setFont(new Font("Arial", Font.PLAIN, 12));
         backButton.setForeground(new Color(70, 130, 180));
-
         backButton.setContentAreaFilled(false);
         backButton.setFocusPainted(false);
         gbc.gridx = 0;
@@ -115,53 +95,38 @@ public class Registro extends JPanel {
         contentPanel.add(backButton, gbc);
 
         add(contentPanel, BorderLayout.CENTER);
-
-
-        registerButton.addActionListener(e -> registrar());
-
-
-        backButton.addActionListener(e -> {
-            cardLayout.show(mainPanel, "telaLogin");
-        });
     }
 
-    private void registrar() {
-        String login = loginField.getText();
-        String senha = new String(senhaField.getPassword());
-        String avatarURL = (String) avatarComboBox.getSelectedItem();
+    // Métodos para o Controller adicionar os Listeners
+    public void addRegisterButtonListener(ActionListener listener) {
+        registerButton.addActionListener(listener);
+    }
 
-        if (login.isEmpty() || senha.isEmpty() || avatarURL == null || avatarURL.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor, preencha todos os campos e selecione um avatar.", "Erro de Registro", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+    public void addBackButtonListener(ActionListener listener) {
+        backButton.addActionListener(listener);
+    }
 
-        try {
+    // Métodos para o Controller obter e limpar dados da View
+    public String getLogin() {
+        return loginField.getText();
+    }
 
-            Usuario existingUser = usuarioDAO.getUsuarioByLogin(login);
-            if (existingUser != null) {
-                JOptionPane.showMessageDialog(this, "Login já existe. Por favor, escolha outro.", "Erro de Registro", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+    public String getSenha() {
+        return new String(senhaField.getPassword());
+    }
 
+    public String getAvatarURL() {
+        return (String) avatarComboBox.getSelectedItem();
+    }
 
-            Usuario novoUsuario = new Usuario(login, senha, avatarURL, 0, 0);
+    public void clearFields() {
+        loginField.setText("");
+        senhaField.setText("");
+        avatarComboBox.setSelectedIndex(0);
+    }
 
-
-            novoUsuario = usuarioDAO.addUsuario(novoUsuario);
-
-            if (novoUsuario.getId() > 0) {
-                JOptionPane.showMessageDialog(this, "Registro bem-sucedido! Bem-vindo, " + novoUsuario.getLogin() + "!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                cardLayout.show(mainPanel, "telaLogin");
-                loginField.setText("");
-                senhaField.setText("");
-                avatarComboBox.setSelectedIndex(0);
-            } else {
-                JOptionPane.showMessageDialog(this, "Falha ao registrar usuário. Tente novamente.", "Erro de Registro", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao registrar usuário: " + ex.getMessage(), "Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
-        }
+    // Métodos para o Controller exibir mensagens
+    public void showMessage(String message, String title, int messageType) {
+        JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 }

@@ -2,7 +2,6 @@ package test.view;
 
 import main.dao.impl.UsuarioDaoImpl;
 import main.entity.Usuario;
-import main.view.Estatisticas;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

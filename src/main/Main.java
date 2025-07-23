@@ -1,9 +1,9 @@
 package main;
 
+import main.controller.*;
 import main.dao.UsuarioDao;
 import main.util.Db;
 import main.view.*;
-import main.view.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,17 +22,22 @@ public class Main  {
 
         CardLayout cardLayout = new CardLayout();
         JPanel mainPanel = new JPanel(cardLayout);
-        Estatisticas telaEstatisticas = new Estatisticas(mainPanel,cardLayout);
-        Simulacao telaSimulacao = new Simulacao(mainPanel, cardLayout);
-        Menu telaInicial = new Menu(telaSimulacao,telaEstatisticas,mainPanel, cardLayout);
-        Login telaLogin = new Login(telaInicial,mainPanel,cardLayout);
-        Registro telaRegistro = new Registro(mainPanel,cardLayout);
+        EstatisticasView estatisticasView = new EstatisticasView();
+        SimulacaoView simulacaoView = new SimulacaoView();
+        MenuView menuView = new MenuView();
+        LoginView loginView = new LoginView();
+        RegistroView registroView = new RegistroView();
 
-        mainPanel.add(telaLogin,"telaLogin");
-        mainPanel.add(telaInicial, "telaInicial");
-        mainPanel.add(telaSimulacao, "telaSimulacao");
-        mainPanel.add(telaRegistro,"telaRegistro");
-        mainPanel.add(telaEstatisticas,"telaEstatisticas");
+        SimulacaoController simulacaoController = new SimulacaoController(simulacaoView,mainPanel,cardLayout);
+        EstatisticasController estatisticasController = new EstatisticasController(estatisticasView,mainPanel,cardLayout);
+        RegistroController registroController = new RegistroController(registroView,mainPanel,cardLayout);
+        MenuController menuController = new MenuController(menuView,simulacaoController,estatisticasController, mainPanel,cardLayout);
+        LoginController loginController = new LoginController(loginView,mainPanel,cardLayout,menuController);
+        mainPanel.add(loginView,"telaLogin");
+        mainPanel.add(menuView, "telaMenu");
+        mainPanel.add(simulacaoView, "telaSimulacao");
+        mainPanel.add(registroView,"telaRegistro");
+        mainPanel.add(estatisticasView,"telaEstatisticas");
 
         frame.add(mainPanel);
         frame.setVisible(true);
