@@ -1,11 +1,11 @@
-package main.controller; // Crie um pacote 'controller' para esta classe
+package main.controller;
 
 import main.dao.impl.UsuarioDaoImpl;
 import main.entity.Usuario;
-import main.view.RegistroView; // Importe a View
+import main.view.RegistroView;
 
 import javax.swing.*;
-import java.awt.*; // Importe CardLayout
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -13,17 +13,16 @@ import java.sql.SQLException;
 public class RegistroController {
 
     private RegistroView view;
-    private UsuarioDaoImpl usuarioDAO;
-    private JPanel mainPanel; // Referência ao painel principal para troca de telas
-    private CardLayout cardLayout; // Referência ao CardLayout para troca de telas
+    private UsuarioDaoImpl usuarioDAO; // Injetar este DAO é uma boa prática
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
 
     public RegistroController(RegistroView view, JPanel mainPanel, CardLayout cardLayout) {
         this.view = view;
-        this.usuarioDAO = new UsuarioDaoImpl(); // Instancia o DAO
+        this.usuarioDAO = new UsuarioDaoImpl(); // Idealmente, injetar via construtor
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
 
-        // Adiciona os ActionListeners aos botões da View
         this.view.addRegisterButtonListener(new RegisterButtonListener());
         this.view.addBackButtonListener(new BackButtonListener());
     }
@@ -34,9 +33,10 @@ public class RegistroController {
         public void actionPerformed(ActionEvent e) {
             String login = view.getLogin();
             String senha = view.getSenha();
-            String avatarURL = view.getAvatarURL();
+            // Agora pegamos o caminho do avatar da View
+            String avatarPath = view.getSelectedAvatarPath();
 
-            if (login.isEmpty() || senha.isEmpty() || avatarURL == null || avatarURL.isEmpty()) {
+            if (login.isEmpty() || senha.isEmpty() || avatarPath == null || avatarPath.isEmpty()) {
                 view.showMessage("Por favor, preencha todos os campos e selecione um avatar.", "Erro de Registro", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -49,8 +49,8 @@ public class RegistroController {
                     return;
                 }
 
-                // Cria um novo usuário
-                Usuario novoUsuario = new Usuario(login, senha, avatarURL, 0, 0);
+                // Cria um novo usuário com o caminho do avatar
+                Usuario novoUsuario = new Usuario(login, senha, avatarPath, 0, 0);
 
                 // Adiciona o usuário ao banco de dados
                 novoUsuario = usuarioDAO.addUsuario(novoUsuario);
@@ -74,7 +74,7 @@ public class RegistroController {
     class BackButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            view.clearFields(); // Opcional: Limpar campos ao voltar
+            view.clearFields(); // Limpa os campos ao voltar
             cardLayout.show(mainPanel, "telaLogin"); // Volta para a tela de login
         }
     }

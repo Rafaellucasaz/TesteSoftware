@@ -1,19 +1,22 @@
 package main.controller;
 
+import main.dao.impl.UsuarioDaoImpl;
 import main.entity.Usuario;
 import main.util.SessionManager;
 import main.view.MenuView;
 
 import javax.swing.*;
-import java.awt.*; // Importe CardLayout
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 public class MenuController {
 
     private MenuView view;
-    private SimulacaoController simulacaoController; // Nova dependência
-    private EstatisticasController estatisticasController; // Nova dependência
+    private UsuarioDaoImpl usuarioDao;
+    private SimulacaoController simulacaoController;
+    private EstatisticasController estatisticasController;
     private JPanel mainPanel;
     private CardLayout cardLayout;
 
@@ -23,36 +26,30 @@ public class MenuController {
                           JPanel mainPanel,
                           CardLayout cardLayout) {
         this.view = view;
+        this.usuarioDao = new UsuarioDaoImpl();
         this.simulacaoController = simulacaoController;
         this.estatisticasController = estatisticasController;
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
 
-        // Adiciona os ActionListeners aos botões da View
         this.view.addIniciarButtonListener(new IniciarButtonListener());
         this.view.addEstatisticasButtonListener(new EstatisticasButtonListener());
-
-        // Atualiza o nome do usuário ao iniciar o controller
+        this.view.addDeletarUsuarioButtonListener(new DeletarUsuarioButtonListener());
+        this.view.addLogoutButtonListener(new LogoutButtonListener());
         setLoggedInUserName();
     }
 
-    /**
-     * Atualiza o rótulo do usuário logado na View.
-     * Este método pode ser chamado por outros controllers (ex: LoginController)
-     * quando um usuário faz login com sucesso, para atualizar a tela de menu.
-     */
+
     public void setLoggedInUserName() {
         Usuario usuario = SessionManager.getInstance().getLoggedInUser();
         if (usuario != null) {
-            view.setUserLabelText("Usuário: " + usuario.getLogin());
+            // Agora chamamos setUserInfo para atualizar texto e imagem
+            view.setUserInfo(usuario.getLogin(), usuario.getAvatarURL());
         } else {
-            view.setUserLabelText("");
+            view.setUserInfo("", ""); // Limpa se não houver usuário
         }
     }
 
-    /**
-     * Listener para o botão "Iniciar Simulação".
-     */
     class IniciarButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -71,10 +68,9 @@ public class MenuController {
                 } else if (numCriaturas < 2) {
                     view.showMessage("Número mínimo de criaturas é 2.", "Erro de Entrada", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    // Chama o método no SimulacaoController para iniciar a simulação
                     simulacaoController.iniciarSimulacao(numCriaturas);
-                    view.clearCriaturasField(); // Limpa o campo na própria MenuView
-                    cardLayout.show(mainPanel, "telaSimulacao"); // Navega para a tela de simulação
+                    view.clearCriaturasField();
+                    cardLayout.show(mainPanel, "telaSimulacao");
                 }
             } catch (NumberFormatException ex) {
                 view.showMessage("Número de criaturas inválido. Digite apenas números inteiros.", "Erro de Entrada", JOptionPane.ERROR_MESSAGE);
@@ -82,15 +78,32 @@ public class MenuController {
         }
     }
 
-    /**
-     * Listener para o botão "Estatísticas".
-     */
     class EstatisticasButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Chama o método no EstatisticasController para carregar os dados
             estatisticasController.carregarEstatisticas();
-            cardLayout.show(mainPanel, "telaEstatisticas"); // Navega para a tela de estatísticas
+            cardLayout.show(mainPanel, "telaEstatisticas");
+        }
+    }
+
+    class DeletarUsuarioButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e){
+            try {
+                usuarioDao.deleteUsuario(SessionManager.getInstance().getLoggedInUser().getId());
+                SessionManager.getInstance().setLoggedInUser(null);
+                cardLayout.show(mainPanel,"telaLogin");
+            } catch (SQLException ex) {
+                view.showMessage("Erro ao deletar usuário: " + ex.getMessage(), "Erro de Banco de Dados", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    class LogoutButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e){
+            SessionManager.getInstance().setLoggedInUser(null);
+            cardLayout.show(mainPanel,"telaLogin");
         }
     }
 }

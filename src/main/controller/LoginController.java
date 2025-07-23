@@ -1,12 +1,12 @@
-package main.controller; // Crie um pacote 'controller'
+package main.controller;
 
 import main.dao.impl.UsuarioDaoImpl;
 import main.entity.Usuario;
 import main.util.SessionManager;
-import main.view.LoginView; // Importe a View
+import main.view.LoginView;
 
 import javax.swing.*;
-import java.awt.*; // Importe CardLayout
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -15,25 +15,23 @@ public class LoginController {
 
     private LoginView view;
     private UsuarioDaoImpl usuarioDAO;
-    private JPanel mainPanel;    // Referência ao painel principal para troca de telas
-    private CardLayout cardLayout; // Referência ao CardLayout
-    private MenuController menuController; // Nova dependência: para atualizar o nome do usuário no menu
+    private JPanel mainPanel;
+    private CardLayout cardLayout;
+    private MenuController menuController;
 
     public LoginController(LoginView view, JPanel mainPanel, CardLayout cardLayout, MenuController menuController) {
         this.view = view;
-        this.usuarioDAO = new UsuarioDaoImpl(); // Instancia o DAO
+        this.usuarioDAO = new UsuarioDaoImpl();
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
-        this.menuController = menuController; // Atribui a referência ao MenuController
+        this.menuController = menuController;
 
-        // Adiciona os ActionListeners aos botões da View
+
         this.view.addLoginButtonListener(new LoginButtonListener());
         this.view.addRegisterButtonListener(new RegisterButtonListener());
     }
 
-    /**
-     * Listener para o botão de Login.
-     */
+
     class LoginButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -49,15 +47,15 @@ public class LoginController {
                 Usuario usuario = usuarioDAO.getUsuarioByLogin(login);
 
                 if (usuario != null && usuario.getSenha().equals(senha)) {
-                    SessionManager.getInstance().setLoggedInUser(usuario); // Define o usuário na sessão
+                    SessionManager.getInstance().setLoggedInUser(usuario);
                     view.showMessage("Login bem-sucedido! Bem-vindo, " + usuario.getLogin() + "!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                    view.clearFields(); // Limpa os campos após o login bem-sucedido
+                    view.clearFields();
 
-                    // Atualiza o nome do usuário na tela de menu
+
                     if (menuController != null) {
                         menuController.setLoggedInUserName();
                     }
-                    cardLayout.show(mainPanel, "telaMenu"); // Navega para a tela de menu
+                    cardLayout.show(mainPanel, "telaMenu");
                 } else {
                     view.showMessage("Login ou senha incorretos.", "Erro de Login", JOptionPane.ERROR_MESSAGE);
                 }
@@ -68,14 +66,12 @@ public class LoginController {
         }
     }
 
-    /**
-     * Listener para o botão de Registro.
-     */
+
     class RegisterButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            view.clearFields(); // Opcional: Limpar campos ao navegar para o registro
-            cardLayout.show(mainPanel, "telaRegistro"); // Navega para a tela de registro
+            view.clearFields();
+            cardLayout.show(mainPanel, "telaRegistro");
         }
     }
 }
