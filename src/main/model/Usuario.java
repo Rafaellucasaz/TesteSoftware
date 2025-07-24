@@ -26,6 +26,10 @@ public class Usuario {
         this.qtdSimulacoes = qtdSimulacoes;
     }
 
+    public Usuario() {
+
+    }
+
     public int getId() {
         return id;
     }

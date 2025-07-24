@@ -28,6 +28,8 @@ public class RegistroController {
     }
 
 
+
+
     class RegisterButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {

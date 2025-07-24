@@ -3,7 +3,6 @@ package test.model;
 import main.model.Horizonte;
 import main.model.Criatura;
 import main.model.Tipos;
-import net.jqwik.api.Property;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -82,7 +81,7 @@ public class CriaturaTest {
     @Test
     void testCriaturaMaisProximaRetornaCorreto() {
         Criatura outra = new Criatura(5, Tipos.minion, 15);
-        outra.setPosX(criaturaMinion.getPosX() + 0.5);
+        outra.setPosX(criaturaMinion.getPosX() + 1.5);
 
         List<Criatura> lista = new ArrayList<>();
         lista.add(criaturaMinion);
@@ -127,7 +126,7 @@ public class CriaturaTest {
     @Test
     void testRoubarDivideOuroCorretamente() {
         Criatura alvo = new Criatura(10, Tipos.minion, 10);
-        alvo.setPosX(criaturaMinion.getPosX() + 0.8);
+        alvo.setPosX(criaturaMinion.getPosX() + 2);
 
         List<Criatura> lista = new ArrayList<>();
         lista.add(criaturaMinion);
@@ -227,6 +226,6 @@ public class CriaturaTest {
         assertTrue(cor.getBlue() >= 0 && cor.getBlue() <= 255);
     }
 
-    
+
 
 }

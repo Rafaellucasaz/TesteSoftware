@@ -76,7 +76,7 @@ public class SimulacaoController {
         timer.start();
     }
 
-    private void updateCountsAndScoreboard() {
+    public void updateCountsAndScoreboard() {
         int minionCount = 0;
         int clusterCount = 0;
         int guardiaoCount = 0;
@@ -94,7 +94,7 @@ public class SimulacaoController {
         view.updateScoreboard(criaturas, minionCount, clusterCount, guardiaoCount);
     }
 
-    class SimulationTickListener implements ActionListener {
+    public class SimulationTickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             rodadaAtual++;
@@ -130,7 +130,7 @@ public class SimulacaoController {
         }
     }
 
-    class PauseButtonListener implements ActionListener {
+    public class PauseButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (timer == null) return;
@@ -147,7 +147,7 @@ public class SimulacaoController {
         }
     }
 
-    class BackToMenuButtonListener implements ActionListener {
+   public  class BackToMenuButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (timer != null && timer.isRunning()) {
@@ -158,7 +158,7 @@ public class SimulacaoController {
         }
     }
 
-    private boolean simulacaoFinalizada() {
+    public  boolean simulacaoFinalizada() {
         int minionCount = 0;
         int clusterCount = 0;
         for (Criatura c : criaturas) {
@@ -171,7 +171,7 @@ public class SimulacaoController {
         return minionCount < 1 || (clusterCount < 1 && minionCount == 1);
     }
 
-    private boolean simulacaoSucedida() {
+    public  boolean simulacaoSucedida() {
         for (Criatura c : criaturas) {
             if (c.getTipo() == Tipos.cluster) {
                 return false;
@@ -180,7 +180,7 @@ public class SimulacaoController {
         return true;
     }
 
-    private void handleSimulationEnd() {
+    public void handleSimulationEnd() {
         Usuario usuarioLogado = SessionManager.getInstance().getLoggedInUser();
         if (usuarioLogado != null) {
             usuarioLogado.setPontuacao(usuarioLogado.getPontuacao() + 1);

@@ -1,5 +1,6 @@
 package main.controller; // Crie um pacote 'controller'
 
+import main.dao.UsuarioDao;
 import main.dao.impl.UsuarioDaoImpl;
 import main.model.Usuario;
 import main.view.EstatisticasView; // Importe a View
@@ -20,17 +21,16 @@ public class EstatisticasController {
 
     public EstatisticasController(EstatisticasView view, JPanel mainPanel, CardLayout cardLayout) {
         this.view = view;
-        this.usuarioDAO = new UsuarioDaoImpl(); // Instancia o DAO
+        this.usuarioDAO = new UsuarioDaoImpl();
         this.mainPanel = mainPanel;
         this.cardLayout = cardLayout;
         this.view.addBackButtonListener(new BackButtonListener());
 
-        carregarEstatisticas();
+
     }
 
-
     public void carregarEstatisticas() {
-        view.clearTable(); // Limpa a tabela antes de preencher
+        view.clearTable();
 
         long totalSimulations = 0;
         long totalScore = 0;
@@ -41,7 +41,7 @@ public class EstatisticasController {
             userCount = usuarios.size();
 
             for (Usuario usuario : usuarios) {
-                // Adiciona a linha na tabela da View
+
                 view.addTableRow(new Object[]{
                         usuario.getLogin(),
                         usuario.getPontuacao(),
@@ -71,7 +71,7 @@ public class EstatisticasController {
     }
 
 
-    class BackButtonListener implements ActionListener {
+    public class BackButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
