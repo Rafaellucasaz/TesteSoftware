@@ -2,11 +2,11 @@ package main.view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener; // Importe ActionListener
+import java.awt.event.ActionListener;
 
 public class LoginView extends JPanel {
 
-    // Componentes que o Controller precisará interagir ou obter dados
+
     private JTextField loginField;
     private JPasswordField senhaField;
     private JButton loginButton;
@@ -16,13 +16,13 @@ public class LoginView extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(240, 248, 255));
 
-        // Título da Aplicação
+
         JLabel titleLabel = new JLabel("Simulação de criaturas saltitantes", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         titleLabel.setForeground(new Color(60, 63, 65));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Painel do Formulário de Login
+
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(new Color(240, 248, 255));
 
@@ -30,7 +30,7 @@ public class LoginView extends JPanel {
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Campo de Login
+
         JLabel loginLabel = new JLabel("Login:");
         loginLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
@@ -45,7 +45,7 @@ public class LoginView extends JPanel {
         gbc.anchor = GridBagConstraints.LINE_START;
         formPanel.add(loginField, gbc);
 
-        // Campo de Senha
+
         JLabel senhaLabel = new JLabel("Senha:");
         senhaLabel.setFont(new Font("Arial", Font.PLAIN, 14));
         gbc.gridx = 0;
@@ -60,7 +60,7 @@ public class LoginView extends JPanel {
         gbc.anchor = GridBagConstraints.LINE_START;
         formPanel.add(senhaField, gbc);
 
-        // Botão de Login
+
         loginButton = new JButton("Entrar");
         loginButton.setFont(new Font("Arial", Font.BOLD, 16));
         loginButton.setBackground(new Color(70, 130, 180)); // Azul aço
@@ -73,7 +73,7 @@ public class LoginView extends JPanel {
         gbc.anchor = GridBagConstraints.CENTER;
         formPanel.add(loginButton, gbc);
 
-        // Botão de Registro
+
         registerButton = new JButton("Registre-se!");
         registerButton.setFont(new Font("Arial", Font.PLAIN, 12));
         registerButton.setForeground(new Color(70, 130, 180));
@@ -87,7 +87,7 @@ public class LoginView extends JPanel {
         add(formPanel, BorderLayout.CENTER);
     }
 
-    // --- Métodos para o Controller Definir Eventos e Obter/Limpar Dados ---
+
 
     public void addLoginButtonListener(ActionListener listener) {
         loginButton.addActionListener(listener);

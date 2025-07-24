@@ -1,6 +1,6 @@
-package test.entity;
+package test.model;
 
-import main.entity.Usuario;
+import main.model.Usuario;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 public class UsuarioTest {

@@ -3,48 +3,48 @@ package main.view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionListener; // Importe ActionListener
+import java.awt.event.ActionListener;
 
 public class EstatisticasView extends JPanel {
 
-    // Componentes que o Controller precisará interagir
+
     private JTable statsTable;
     private DefaultTableModel tableModel;
     private JLabel totalSimulationsLabel;
     private JLabel avgScoreLabel;
     private JLabel avgSimulationsLabel;
-    private JButton backButton; // O controller precisa adicionar o listener
+    private JButton backButton;
 
     public EstatisticasView() {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(240, 248, 255));
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        // Título
+
         JLabel titleLabel = new JLabel("Estatísticas da Simulação", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
         titleLabel.setForeground(new Color(60, 63, 65));
         add(titleLabel, BorderLayout.NORTH);
 
-        // Tabela de Estatísticas
+
         String[] columnNames = {"Login", "Pontuação", "Simulações"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Torna todas as células não editáveis
+                return false;
             }
         };
         statsTable = new JTable(tableModel);
         statsTable.setFont(new Font("Arial", Font.PLAIN, 12));
         statsTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
         statsTable.setRowHeight(25);
-        statsTable.setFillsViewportHeight(true); // Preenche a altura do JScrollPane
+        statsTable.setFillsViewportHeight(true);
 
         JScrollPane scrollPane = new JScrollPane(statsTable);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(180, 180, 180), 1));
         add(scrollPane, BorderLayout.CENTER);
 
-        // Painel de Resumo (Médias e Totais)
+
         JPanel summaryPanel = new JPanel(new GridLayout(3, 1, 5, 5));
         summaryPanel.setBackground(new Color(240, 248, 255));
 
@@ -60,7 +60,7 @@ public class EstatisticasView extends JPanel {
         avgScoreLabel.setFont(new Font("Arial", Font.BOLD, 14));
         summaryPanel.add(avgScoreLabel);
 
-        // Painel de Botões
+
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(new Color(240, 248, 255));
 
@@ -72,14 +72,14 @@ public class EstatisticasView extends JPanel {
         backButton.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         buttonPanel.add(backButton);
 
-        // Junta o painel de resumo e o painel de botões no sul
+
         JPanel southPanel = new JPanel(new BorderLayout());
         southPanel.add(summaryPanel, BorderLayout.NORTH);
         southPanel.add(buttonPanel, BorderLayout.SOUTH);
         add(southPanel, BorderLayout.SOUTH);
     }
 
-    // --- Métodos para o Controller Interagir e Atualizar a View ---
+
 
     public void addBackButtonListener(ActionListener listener) {
         backButton.addActionListener(listener);

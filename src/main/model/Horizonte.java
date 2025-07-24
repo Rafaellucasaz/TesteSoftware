@@ -1,4 +1,4 @@
-package main.entity;
+package main.model;
 
 public class Horizonte {
     public static int comecoHorizonte = 10;

@@ -1,5 +1,5 @@
 package main.util;
-import main.entity.Usuario;
+import main.model.Usuario;
 public class SessionManager {
     private static SessionManager instance;
     private Usuario loggedInUser;

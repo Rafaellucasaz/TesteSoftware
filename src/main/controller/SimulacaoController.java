@@ -2,10 +2,10 @@ package main.controller;
 
 import main.dao.UsuarioDao;
 import main.dao.impl.UsuarioDaoImpl;
-import main.entity.Criatura;
-import main.entity.Horizonte;
-import main.entity.Tipos;
-import main.entity.Usuario;
+import main.model.Criatura;
+import main.model.Horizonte;
+import main.model.Tipos;
+import main.model.Usuario;
 import main.util.SessionManager;
 import main.view.SimulacaoView;
 
@@ -40,7 +40,7 @@ public class SimulacaoController {
         this.view.addBackToMenuButtonListener(new BackToMenuButtonListener());
     }
 
-    public void iniciarSimulacao(int nCriaturas) {
+    public void iniciarSimulacao(int nCriaturas)  {
         if (timer != null && timer.isRunning()) {
             timer.stop();
         }
@@ -151,10 +151,10 @@ public class SimulacaoController {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (timer != null && timer.isRunning()) {
-                timer.stop(); // Para o timer se estiver rodando
+                timer.stop();
             }
-            // REMOVIDO: view.clearCriaturasField(); // Esta linha foi removida
-            cardLayout.show(mainPanel, "telaMenu"); // Volta para a tela de menu
+
+            cardLayout.show(mainPanel, "telaMenu");
         }
     }
 

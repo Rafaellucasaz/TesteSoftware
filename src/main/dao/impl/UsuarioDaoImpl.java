@@ -1,7 +1,7 @@
 package main.dao.impl;
 
 import main.dao.UsuarioDao;
-import main.entity.Usuario;
+import main.model.Usuario;
 import main.util.Db;
 
 import java.sql.Connection;
@@ -34,7 +34,7 @@ public class UsuarioDaoImpl implements UsuarioDao {
 
             try (ResultSet rs = pstmt.getGeneratedKeys()) {
                 if (rs.next()) {
-                    // O ID gerado geralmente está na primeira coluna
+
                     usuario.setId(rs.getInt(1));
                 }
             }

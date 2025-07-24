@@ -1,4 +1,4 @@
-package main.entity;
+package main.model;
 
 public enum Tipos {
     minion,

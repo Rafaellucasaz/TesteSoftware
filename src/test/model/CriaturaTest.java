@@ -1,8 +1,9 @@
-package test.entity;
+package test.model;
 
-import main.entity.Horizonte;
-import main.entity.Criatura;
-import main.entity.Tipos;
+import main.model.Horizonte;
+import main.model.Criatura;
+import main.model.Tipos;
+import net.jqwik.api.Property;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -61,28 +62,12 @@ public class CriaturaTest {
         assertEquals(novaCor, criaturaMinion.getColor());
     }
 
-    // ---------------- Testes de Fronteira para posX ----------------
-
     @Test
     void testSetPosXDentroDosLimites() {
         double meio = (Horizonte.comecoHorizonte + Horizonte.finalHorizonte) / 2;
         criaturaMinion.setPosX(meio);
         assertEquals(meio, criaturaMinion.getPosX());
     }
-
-    @Test
-    void testSetPosXMenorQueInicioReseta() {
-        criaturaMinion.setPosX(Horizonte.comecoHorizonte - 5);
-        assertTrue(criaturaMinion.getPosX() >= Horizonte.comecoHorizonte);
-    }
-
-    @Test
-    void testSetPosXMaiorQueFinalReseta() {
-        criaturaMinion.setPosX(Horizonte.finalHorizonte + 5);
-        assertTrue(criaturaMinion.getPosX() >= Horizonte.comecoHorizonte);
-    }
-
-    // ---------------- Testes Estruturais e MC/DC ----------------
 
     @Test
     void testMoveDentroDosLimites() {
@@ -138,7 +123,6 @@ public class CriaturaTest {
         assertEquals(criaturaGuardiao, lista.get(0));
     }
 
-    // ---------------- Testes do roubo ----------------
 
     @Test
     void testRoubarDivideOuroCorretamente() {
@@ -221,7 +205,18 @@ public class CriaturaTest {
         assertEquals(Tipos.cluster, lista.get(0).getTipo());
     }
 
-    // ---------------- Testes Baseados em Propriedades ----------------
+    //======================= Teste de fronteira ===========================
+    @Test
+    void testSetPosXMenorQueInicioReseta() {
+        criaturaMinion.setPosX(Horizonte.comecoHorizonte - 5);
+        assertTrue(criaturaMinion.getPosX() >= Horizonte.comecoHorizonte);
+    }
+
+    @Test
+    void testSetPosXMaiorQueFinalReseta() {
+        criaturaMinion.setPosX(Horizonte.finalHorizonte + 5);
+        assertTrue(criaturaMinion.getPosX() >= Horizonte.comecoHorizonte);
+    }
 
     @RepeatedTest(20)
     void testCorGeradaEstaDentroDosLimites() {
@@ -231,4 +226,7 @@ public class CriaturaTest {
         assertTrue(cor.getGreen() >= 0 && cor.getGreen() <= 255);
         assertTrue(cor.getBlue() >= 0 && cor.getBlue() <= 255);
     }
+
+    
+
 }

@@ -1,7 +1,7 @@
 package main.controller;
 
 import main.dao.impl.UsuarioDaoImpl;
-import main.entity.Usuario;
+import main.model.Usuario;
 import main.util.SessionManager;
 import main.view.LoginView;
 

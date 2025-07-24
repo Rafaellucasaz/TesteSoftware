@@ -1,7 +1,7 @@
 package main.controller;
 
 import main.dao.impl.UsuarioDaoImpl;
-import main.entity.Usuario;
+import main.model.Usuario;
 import main.util.SessionManager;
 import main.view.MenuView;
 
@@ -43,10 +43,10 @@ public class MenuController {
     public void setLoggedInUserName() {
         Usuario usuario = SessionManager.getInstance().getLoggedInUser();
         if (usuario != null) {
-            // Agora chamamos setUserInfo para atualizar texto e imagem
+
             view.setUserInfo(usuario.getLogin(), usuario.getAvatarURL());
         } else {
-            view.setUserInfo("", ""); // Limpa se não houver usuário
+            view.setUserInfo("", "");
         }
     }
 

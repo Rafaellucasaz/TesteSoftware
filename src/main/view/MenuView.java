@@ -43,7 +43,7 @@ public class MenuView extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(240, 248, 255));
 
-        // --- Header Panel (remains at NORTH of BorderLayout) ---
+
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(240, 248, 255));
 
@@ -51,42 +51,40 @@ public class MenuView extends JPanel {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         headerPanel.add(titleLabel, BorderLayout.CENTER);
 
-        // --- User Info Panel (NEW: this will be the centered avatar/name) ---
-        // Using a JPanel with BorderLayout for vertical stacking of avatar and label
-        // And then placing this JPanel in the center of the MenuView's BorderLayout.
+
         JPanel userInfoPanel = new JPanel();
-        userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS)); // Stack vertically
+        userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
         userInfoPanel.setBackground(new Color(240, 248, 255));
-        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0)); // Some top padding
+        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
         avatarDisplayLabel = new JLabel();
-        avatarDisplayLabel.setPreferredSize(new Dimension(80, 80)); // Increased size for avatar
-        avatarDisplayLabel.setMaximumSize(new Dimension(80, 80)); // Ensure it doesn't grow too much
-        avatarDisplayLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center horizontally
+        avatarDisplayLabel.setPreferredSize(new Dimension(80, 80));
+        avatarDisplayLabel.setMaximumSize(new Dimension(80, 80));
+        avatarDisplayLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         userLabel = new JLabel("");
-        userLabel.setFont(new Font("Arial", Font.BOLD, 14)); // Slightly larger font for prominence
+        userLabel.setFont(new Font("Arial", Font.BOLD, 14));
         userLabel.setForeground(new Color(60, 63, 65));
-        userLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center horizontally
+        userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         userInfoPanel.add(avatarDisplayLabel);
-        userInfoPanel.add(Box.createVerticalStrut(5)); // Small vertical space
+        userInfoPanel.add(Box.createVerticalStrut(5));
         userInfoPanel.add(userLabel);
-        userInfoPanel.add(Box.createVerticalGlue()); // Push content to the top within its area
+        userInfoPanel.add(Box.createVerticalGlue());
         JPanel topContentPanel = new JPanel(new BorderLayout());
         topContentPanel.setBackground(new Color(240, 248, 255));
-        topContentPanel.add(titleLabel, BorderLayout.NORTH); // Main title at the very top
+        topContentPanel.add(titleLabel, BorderLayout.NORTH);
 
 
         topContentPanel.add(userInfoPanel, BorderLayout.CENTER);
 
-        add(topContentPanel, BorderLayout.NORTH); // Add the combined top panel to the main view
+        add(topContentPanel, BorderLayout.NORTH);
 
 
-        // --- Form Panel (remains at CENTER of BorderLayout) ---
+
         JPanel formPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         formPanel.setBackground(new Color(240, 248, 255));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0)); // Padding from top info
+        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
         criaturasField = new JTextField(5);
         ((AbstractDocument) criaturasField.getDocument()).setDocumentFilter(new NumericFilter());
@@ -123,7 +121,7 @@ public class MenuView extends JPanel {
         return criaturasField.getText();
     }
 
-    // Method to set both user name and avatar image
+
     public void setUserInfo(String userName, String avatarPath) {
         userLabel.setText(userName != null && !userName.isEmpty() ? "Usuário: " + userName : "");
 
@@ -138,11 +136,11 @@ public class MenuView extends JPanel {
                             Image.SCALE_SMOOTH
                     );
                     avatarDisplayLabel.setIcon(new ImageIcon(scaledImage));
-                    avatarDisplayLabel.setText(""); // Remove error text if image loads
+                    avatarDisplayLabel.setText("");
                 } else {
                     System.err.println("Erro: Imagem do avatar não pôde ser carregada completamente: " + avatarPath);
                     avatarDisplayLabel.setIcon(null);
-                    avatarDisplayLabel.setText("!"); // Small indicator for load failure
+                    avatarDisplayLabel.setText("!");
                 }
             } catch (Exception ex) {
                 System.err.println("Exceção ao carregar imagem do avatar para o menu: " + avatarPath);

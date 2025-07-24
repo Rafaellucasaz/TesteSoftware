@@ -1,7 +1,5 @@
-package main.entity;
+package main.model;
 
-
-import main.entity.Horizonte;
 
 import java.awt.*;
 import java.util.List;
@@ -35,6 +33,11 @@ public class Criatura {
     }
 
     public void setOuro(double ouro) {
+
+        if(ouro < 0){
+            throw new IllegalArgumentException("Ouro não pode ser menor que 0");
+        }
+
         this.ouro = ouro;
     }
 

@@ -2,7 +2,7 @@ package test.dao;
 
 import main.dao.UsuarioDao;
 import main.dao.impl.UsuarioDaoImpl;
-import main.entity.Usuario;
+import main.model.Usuario;
 import main.util.Db;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
